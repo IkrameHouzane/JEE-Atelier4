@@ -1,12 +1,7 @@
-# Module EJB: atelier4-ejb
-
-Ce module `atelier4-ejb` fait partie d'une application Java Enterprise Edition (JEE) plus large. Il est responsable de la logique métier et de la persistance des données pour la gestion des étudiants, des modules et des notes.
-
-## Fonctionnalités du Module EJB
-
-*   **Gestion des Entités:** Définit les entités JPA pour `Etudiant`, `Module` et `Suivie`.
-*   **Services Métier (EJBs):** Fournit les interfaces et implémentations des services pour les opérations CRUD (Create, Read, Update, Delete) et d'autres logiques métier liées aux étudiants, modules et notes.
-*   **Persistance:** Gère l'interaction avec la base de données via JPA/Hibernate.
+# Atelier 4 : Mise en place d’une application distribuée JEE
+## Introduction : 
+L’objectif de cet atelier était de maîtriser les technologies JEE modernes à travers la conception d’une application distribuée complète utilisant :Jakarta EE 10, EJB 4.0 (Stateless Session Bean), JPA (Hibernate), Servlets 6.0 & JSP, WildFly 37.0.1.Final, MySQL, Maven & IntelliJ IDEA. 
+Le projet implémente un système de gestion académique avec CRUD complet sur trois entités : Étudiants, Modules, Notes (Suivies).
 
 ## Technologies Clés
 
@@ -17,29 +12,78 @@ Ce module `atelier4-ejb` fait partie d'une application Java Enterprise Edition (
 *   **Maven:** Pour la gestion de projet et la construction du module.
 *   **Lombok:** Pour réduire le code boilerplate des entités.
 
-## Structure du Module
+## Configuration de la Base de Données
+### Schéma de la Base de Données SQL
+```sql
+-- Création de la base de données
+                        CREATE DATABASE IF NOT EXISTS getudiants 
+                        CHARACTER SET utf8mb4 
+                        COLLATE utf8mb4_unicode_ci;
 
-*   `src/main/java/ma/fstt/entities`: Contient les classes d'entité JPA (`Etudiant`, `Module`, `Suivie`).
-*   `src/main/java/ma/fstt/services`: Contient les interfaces `Remote` des services EJB.
-*   `src/main/java/ma/fstt/serviceImpl`: Contient les implémentations des services EJB.
-*   `src/main/resources/META-INF/persistence.xml`: Fichier de configuration de la persistance JPA.
+-- Étudiants
+CREATE TABLE etudiants (
+                           id_etudiant BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           nom VARCHAR(50) NOT NULL,
+                           prenom VARCHAR(50) NOT NULL,
+                           cne VARCHAR(20) UNIQUE NOT NULL,
+                           adresse TEXT,
+                           niveau VARCHAR(20)
+);
 
-## Construction du Module
+-- Modules
+CREATE TABLE modules (
+                         id_module BIGINT PRIMARY KEY AUTO_INCREMENT,
+                         nom_module VARCHAR(100) NOT NULL,
+                         code_module VARCHAR(20) UNIQUE NOT NULL,
+                         coefficient DECIMAL(4,2) NOT NULL,
+                         description TEXT
+);
 
-Pour construire ce module EJB et générer le fichier `atelier4-ejb.jar`, naviguez vers le répertoire du module et exécutez la commande Maven:
-
-```bash
-cd C:\Users\DELL\IdeaProjects\atelier4-ejb
-mvn clean install
+-- Notes (Suivies)
+CREATE TABLE suivies (
+                         id_suivie BIGINT PRIMARY KEY AUTO_INCREMENT,
+                         note DECIMAL(4,2) NOT NULL,
+                         date_examen DATE NOT NULL,
+                         etudiant_id BIGINT NOT NULL,
+                         module_id BIGINT NOT NULL,
+                         FOREIGN KEY (etudiant_id) REFERENCES etudiants(id_etudiant),
+                         FOREIGN KEY (module_id) REFERENCES modules(id_module)
+);
 ```
 
-Ce `.jar` sera ensuite inclus dans le `atelier4-webb.war` pour le déploiement final.
 
-## Modifications Clés Apportées (par l'agent)
+## Fonctionnalités :
+### 1. Gestion des Étudiants 
+    ✅ Lister tous les étudiants avec pagination
+    ✅ Ajouter un nouvel étudiant
+    ✅ Modifier les informations d'un étudiant
+    ✅ Supprimer un étudiant (avec confirmation)
+### 2. Gestion des Modules
+    ✅ Lister tous les modules disponibles
+    ✅ Ajouter un nouveau module
+    ✅ Modifier les informations d'un module
+    ✅ Supprimer un module
+### 2. Gestion des notes
+    ✅ Lister toutes les notes avec détails
+    ✅ Ajouter une nouvelle note pour un étudiant/module
+    ✅ Modifier une note existante
+    ✅ Supprimer une note
 
-Les modifications suivantes ont été effectuées dans ce module pour résoudre les problèmes de déploiement et de persistance:
 
-*   **`pom.xml`**:
-    *   Le `packaging` a été changé de `ejb` à `jar` pour assurer une construction correcte du module EJB.
-*   **`src/main/resources/META-INF/persistence.xml`**:
-    *   Le fichier a été mis à jour pour inclure explicitement les classes d'entité (`Etudiant`, `Module`, `Suivie`) via des balises `<class>`, garantissant ainsi que Hibernate les reconnaisse et résolvant l'erreur `UnknownEntityException`.
+
+
+## Captures d'écran
+### Page d'accueil
+![img.png](img.png)
+### Liste des étudiants
+![img_1.png](img_1.png)
+### Formulaire d'ajout
+![img_2.png](img_2.png)
+### Liste des modules
+![img_3.png](img_3.png)
+### Ajouter un module
+![img_4.png](img_4.png)
+### Modifier un module
+![img_5.png](img_5.png)
+### Gestion des notes
+![img_6.png](img_6.png)

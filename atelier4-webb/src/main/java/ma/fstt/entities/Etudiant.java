@@ -4,7 +4,7 @@ import jakarta.persistence.*;  // <--- AJOUTE ÇA
 import java.io.Serializable;
 
 @Entity
-@Table(name = "etudiants")  // Optionnel, mais propre
+@Table(name = "etudiants")
 public class Etudiant implements Serializable {
 
     @Id
