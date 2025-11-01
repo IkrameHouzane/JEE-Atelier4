@@ -19,13 +19,12 @@ public class Suivie implements Serializable {
     @Column(name = "date_examen", nullable = false)
     private LocalDate dateExamen;
 
-    // Relation ManyToOne → Un étudiant a plusieurs suivies
-    @ManyToOne(fetch = FetchType.LAZY)
+    // EAGER → CHARGE IMMÉDIATEMENT
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "etudiant_id", nullable = false)
     private Etudiant etudiant;
 
-    // Relation ManyToOne → Un module a plusieurs suivies
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id", nullable = false)
     private Module module;
 
